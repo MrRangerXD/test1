@@ -1,4 +1,4 @@
-# 🚀 StrenoxCloud VPS Management Bot
+# 🚀 AetherCloud VPS Management Bot
 
 A powerful **Discord VPS deployment and management bot** built with **Python, LXC/LXD, SQLite, and Discord Components V2**.
 

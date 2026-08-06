@@ -23,7 +23,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load environment variables
-DISCORD_TOKEN = os.getenv('DISCORD_TOKEN', 'MTUyOTg4MDYxMjI5NzUxMTA2Mw.GD6euU.3RPkDl559EH8xMUGT9xAjh0bHUpjEYv9x6vc4I')
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN', 'MTUzNDk0NTM3MTkyNTUxNjQ1MQ.GvTcSb.F_a9oHraoxDGpFHIzVGVn7IzO7gPaukNQkBU2k')
 BOT_NAME = os.getenv('BOT_NAME', 'AetherCloud VPS Deployer')
 PREFIX = os.getenv('PREFIX', 'a!')
 YOUR_SERVER_IP = os.getenv('YOUR_SERVER_IP', '127.0.0.1')

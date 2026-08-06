@@ -24,15 +24,15 @@ load_dotenv()
 
 # Load environment variables
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
-BOT_NAME = os.getenv('BOT_NAME', 'StrenoxCloud VPS Deployer')
-PREFIX = os.getenv('PREFIX', 's!')
+BOT_NAME = os.getenv('BOT_NAME', 'AetherCloud VPS Deployer')
+PREFIX = os.getenv('PREFIX', 'a!')
 YOUR_SERVER_IP = os.getenv('YOUR_SERVER_IP', '127.0.0.1')
-MAIN_ADMIN_ID = int(os.getenv('MAIN_ADMIN_ID', 'ENTER_YOUR_DISCORD_ID'))
+MAIN_ADMIN_ID = int(os.getenv('MAIN_ADMIN_ID', '1213850390202810458'))
 VPS_USER_ROLE_ID = int(os.getenv('VPS_USER_ROLE_ID', 'ENTER_VPS_ROLE_ID'))
 DEFAULT_STORAGE_POOL = os.getenv('DEFAULT_STORAGE_POOL', 'default')
 HOST_MOTD = os.getenv('HOST_MOTD', 'bash <(curl -fsSL https://raw.githubusercontent.com/console-25/VPS-MOTD/refs/heads/main/StrenoxCloud)')
 BOT_VERSION = os.getenv('BOT_VERSION', '1.0 Ultimate')
-BOT_DEVELOPER = os.getenv('BOT_DEVELOPER', 'Console')
+BOT_DEVELOPER = os.getenv('BOT_DEVELOPER', 'ZenseiBabe')
 BOT_THUMBNAIL_URL = os.getenv('BOT_THUMBNAIL_URL', 'https://cdn.discordapp.com/icons/1429433938778001561/9163094b8b3a9d7e603ae49969117673.webp')
 BOT_ICON_URL = os.getenv('BOT_ICON_URL', 'https://cdn.discordapp.com/icons/1429433938778001561/9163094b8b3a9d7e603ae49969117673.webp')
 
@@ -614,7 +614,7 @@ def create_embed(title, description="", color=COLOR_PRIMARY):
     )
     embed.set_thumbnail(url=BOT_THUMBNAIL_URL)
     embed.set_footer(
-        text=f"Made by Console • V{BOT_VERSION} • {datetime.now().strftime('%H:%M:%S')}",
+        text=f"Made by ZenseiBabe • V{BOT_VERSION} • {datetime.now().strftime('%H:%M:%S')}",
         icon_url=BOT_ICON_URL
     )
     embed.timestamp = datetime.now()
@@ -1658,7 +1658,7 @@ async def my_vps(ctx):
             inline=False
         )
 
-    embed.set_footer(text=f"Made by Console • VPS Control Panel")
+    embed.set_footer(text=f"Made by Zenseibabe • VPS Control Panel")
     embed.timestamp = ctx.message.created_at
 
     await send_ui(ctx, embed=embed)
@@ -2657,12 +2657,12 @@ async def vps_list(ctx, node_id: int = 1):
             )
             chunk_text = "\n".join(chunk)
             add_field(page_embed, "📋 **VPS List**", f"```{chunk_text}```", False)
-            page_embed.set_footer(text=f"Made by Console • {len(vps_info)} VPS shown")
+            page_embed.set_footer(text=f"Made by ZenseiBabe • {len(vps_info)} VPS shown")
             await send_ui(ctx, embed=page_embed)
     else:
         add_field(embed, "📋 **VPS List**", "No deployments yet. Launch one! 🚀", False)
 
-    embed.set_footer(text=f"Made by Console • Total: {len(vps_info)} VPS")
+    embed.set_footer(text=f"Made by ZenseiBabe • Total: {len(vps_info)} VPS")
     await send_ui(ctx, embed=embed)
 
 @bot.command(name='list-all')
@@ -3480,7 +3480,7 @@ async def system_status(ctx):
     add_field(embed, "🏥 System Health", health_status, False)
     
     # Footer with current time
-    embed.set_footer(text=f"Made by Console • System Status • Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+    embed.set_footer(text=f"Made by ZenseiBabe • System Status • Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
                     icon_url=BOT_ICON_URL)
     
     await send_ui(ctx, embed=embed)
@@ -3718,7 +3718,7 @@ async def user_info(ctx, user: discord.Member):
             inline=False
         )
 
-    embed.set_footer(text="Made by Console • User Resource Dashboard")
+    embed.set_footer(text="Made by ZenseiBabe • User Resource Dashboard")
     embed.timestamp = ctx.message.created_at
 
     await send_ui(ctx, embed=embed)
@@ -3872,7 +3872,7 @@ async def server_stats(ctx):
         inline=True
     )
 
-    embed.set_footer(text="Made by Console • Real-Time Monitoring")
+    embed.set_footer(text="Made by ZenseiBabe • Real-Time Monitoring")
     embed.timestamp = ctx.message.created_at
 
     await send_ui(ctx, embed=embed)
@@ -3914,7 +3914,7 @@ async def vps_info(ctx, container_name: str = None):
         for idx, chunk in enumerate(chunks, 1):
             embed = create_embed(f"🖥️ All VPS (Part {idx}/{len(chunks)})", f"Complete list of all VPS deployments with expiration status", 0x2ecc71)
             add_field(embed, "VPS Inventory", chunk, False)
-            embed.set_footer(text=f"Made by Console • VPS Information System")
+            embed.set_footer(text=f"Made by ZenseiBabe • VPS Information System")
             await send_ui(ctx, embed=embed)
     else:
         found_vps = None
@@ -4022,7 +4022,7 @@ async def vps_info(ctx, container_name: str = None):
         # OS information
         add_field(embed, "🐧 Operating System", f"`{found_vps.get('os_version', 'ubuntu:22.04')}`", True)
         
-        embed.set_footer(text=f"Made by Console • VPS Information System • Container: {container_name}")
+        embed.set_footer(text=f"Made by ZenseiBabe • VPS Information System • Container: {container_name}")
         await send_ui(ctx, embed=embed)
 
 @bot.command(name='restart-vps')
@@ -5055,7 +5055,7 @@ async def quick_help(ctx):
             f"• `{PREFIX}serverstats` - System overview\n"
             f"• `{PREFIX}suspend-vps <container> <reason>` - Suspend VPS", False)
     
-    embed.set_footer(text=f"Made by Console • Use {PREFIX}help for complete command list")
+    embed.set_footer(text=f"Made by ZenseiBabe • Use {PREFIX}help for complete command list")
     await send_ui(ctx, embed=embed)
 
 @bot.command(name='help-search')
@@ -5110,7 +5110,7 @@ async def help_search(ctx, *, search_term: str = None):
     if len(matches) > 15:
         add_field(embed, "Note", f"Showing 15 of {len(matches)} matches. Try a more specific search.", False)
     
-    embed.set_footer(text=f"Made by Console • Use {PREFIX}help for complete list")
+    embed.set_footer(text=f"Made by ZenseiBabe • Use {PREFIX}help for complete list")
     await send_ui(ctx, embed=embed)    
 
 @bot.command(name='node')

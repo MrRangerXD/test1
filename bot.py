@@ -35,7 +35,7 @@ YOUR_SERVER_IP = os.getenv('YOUR_SERVER_IP', '127.0.0.1')
 MAIN_ADMIN_ID = int(os.getenv('MAIN_ADMIN_ID', '1213850390202810458'))
 VPS_USER_ROLE_ID = int(os.getenv('VPS_USER_ROLE_ID', '1534941148915826740'))
 DEFAULT_STORAGE_POOL = os.getenv('DEFAULT_STORAGE_POOL', 'default')
-HOST_MOTD = os.getenv('HOST_MOTD', 'bash <(curl -fsSL https://raw.githubusercontent.com/console-25/VMB-V1/refs/heads/main/AetherCloud)')
+HOST_MOTD = os.getenv('HOST_MOTD', 'bash <(curl -fsSL https://raw.githubusercontent.com/console-25/VPS-MOTD/refs/heads/main/StrenoxCloud)')
 BOT_VERSION = os.getenv('BOT_VERSION', '1.0 Ultimate')
 BOT_DEVELOPER = os.getenv('BOT_DEVELOPER', 'ZenseiBabe')
 BOT_THUMBNAIL_URL = os.getenv('BOT_THUMBNAIL_URL', 'https://cdn.discordapp.com/icons/1429433938778001561/9163094b8b3a9d7e603ae49969117673.webp')
@@ -746,15 +746,63 @@ def _render_embed_into_v2_container(container, embed):
         pass
 
 
+class AppLayoutView(discord.ui.LayoutView):
+    """
+    FIX: Discord's Components V2 payload only allows these top-level types
+    on a LayoutView: ActionRow(1), Section(9), TextDisplay(10),
+    MediaGallery(12), File(13), Separator(14), Container(17). Button(2) and
+    Select(3-8) are NOT valid top-level items — Discord rejects them with:
+        "In components.0: Value of field 'type' must be one of
+         (1, 9, 10, 12, 13, 14, 17)"
+
+    The original code did `self.add_item(some_button_or_select)` directly
+    on LayoutView subclasses throughout the file (NodeSelectView,
+    OSSelectView, ManageView, every inline ConfirmView/ConfirmDelete
+    class, HelpView, etc.) — every one of those crashed the moment the
+    view was actually sent.
+
+    Rather than hand-editing every call site, this subclass overrides
+    add_item() to transparently wrap any Button/Select in an ActionRow
+    (reusing the current row while it has room for up to 5 components,
+    starting a new one when full). This also transparently fixes buttons
+    added via the @discord.ui.button decorator, since discord.py's View
+    machinery adds those through add_item() internally during __init__ too.
+    Every LayoutView subclass in this file should inherit from
+    AppLayoutView instead of discord.ui.LayoutView directly.
+    """
+    def add_item(self, item):
+        if isinstance(item, (discord.ui.Button, discord.ui.Select)):
+            row = getattr(self, '_auto_action_row', None)
+            if row is None or len(row.children) >= 5:
+                row = discord.ui.ActionRow()
+                super().add_item(row)
+                self._auto_action_row = row
+            row.add_item(item)
+            return self
+        # A non-interactive layout item (Container, TextDisplay, etc.) ends
+        # the "current" auto row so later buttons don't get appended after
+        # unrelated content that was added in between.
+        self._auto_action_row = None
+        return super().add_item(item)
+
+
 def ensure_v2_view(embed=None, view=None, timeout=300):
     if view is None:
-        view = discord.ui.LayoutView(timeout=timeout)
+        view = AppLayoutView(timeout=timeout)
     elif not isinstance(view, discord.ui.LayoutView):
         raise TypeError("Components v2 requires discord.ui.LayoutView controls.")
     container = getattr(view, '_v2_content_container', None)
     if container is None:
         container = discord.ui.Container(accent_color=_embed_color_value(embed) if embed else COLOR_PRIMARY)
-        view.add_item(container)
+        # FIX: insert the text container BEFORE any buttons/selects that
+        # were already added during the view's own __init__, so the embed
+        # content renders above the controls instead of below them. Falls
+        # back to a plain append if the internal children list isn't
+        # accessible on some future discord.py version.
+        try:
+            view._children.insert(0, container)
+        except Exception:
+            view.add_item(container)
         view._v2_content_container = container
     if embed is not None:
         _render_embed_into_v2_container(container, embed)
@@ -1829,7 +1877,7 @@ async def lxc_list(ctx, node_id: int = 1):
     except Exception as e:
         await send_ui(ctx, embed=create_error_embed("Error", str(e)))
 
-class NodeSelectView(discord.ui.LayoutView):
+class NodeSelectView(AppLayoutView):
     def __init__(self, ram: int, cpu: int, disk: int, user: discord.Member, ctx, expiry_days: int = None):
         super().__init__(timeout=300)
         self.ram = ram
@@ -1863,7 +1911,7 @@ class NodeSelectView(discord.ui.LayoutView):
         os_view = OSSelectView(self.ram, self.cpu, self.disk, self.user, self.ctx, node_id, self.expiry_days)
         await send_ui(interaction.followup, embed=create_info_embed("Select OS", "Choose the OS for the VPS."), view=os_view)
 
-class OSSelectView(discord.ui.LayoutView):
+class OSSelectView(AppLayoutView):
     def __init__(self, ram: int, cpu: int, disk: int, user: discord.Member, ctx, node_id: int, expiry_days: int = None):
         super().__init__(timeout=300)
         self.ram = ram
@@ -2057,7 +2105,7 @@ async def create_vps(ctx, ram: int, cpu: int, disk: int, user: discord.Member, e
     view = NodeSelectView(ram, cpu, disk, user, ctx, expiry_days)
     await send_ui(ctx, embed=embed, view=view)
 
-class ReinstallOSSelectView(discord.ui.LayoutView):
+class ReinstallOSSelectView(AppLayoutView):
     def __init__(self, parent_view, container_name, owner_id, actual_idx, ram_gb, cpu, storage_gb, node_id):
         super().__init__(timeout=300)
         self.parent_view = parent_view
@@ -2205,7 +2253,7 @@ class ReinstallOSSelectView(discord.ui.LayoutView):
             await send_ui(interaction.followup, embed=error_embed, ephemeral=True)
             self.stop()
 
-class ManageView(discord.ui.LayoutView):
+class ManageView(AppLayoutView):
     def __init__(self, user_id, vps_list, is_shared=False, owner_id=None, is_admin=False, actual_index: Optional[int] = None):
         super().__init__(timeout=300)
         self.user_id = user_id
@@ -2400,7 +2448,7 @@ class ManageView(discord.ui.LayoutView):
             confirm_embed = create_warning_embed("Reinstall Warning",
                 f"⚠️ **WARNING:** This will erase all data on VPS `{container_name}` and reinstall a fresh OS.\n\n"
                 f"This action cannot be undone. Continue?")
-            class ConfirmView(discord.ui.LayoutView):
+            class ConfirmView(AppLayoutView):
                 def __init__(self, parent_view, container_name, owner_id, actual_idx, ram_gb, cpu, storage_gb, node_id):
                     super().__init__(timeout=60)
                     self.parent_view = parent_view
@@ -3004,7 +3052,7 @@ async def ports_command(ctx, subcmd: str = None, *args):
     else:
         await send_ui(ctx, embed=create_error_embed("Invalid Subcommand", f"Use: add <vps_num> <port>, list, remove <id>"))
 
-class ConfirmDeleteView(discord.ui.LayoutView):
+class ConfirmDeleteView(AppLayoutView):
     """Confirmation dialog for VPS deletion"""
     def __init__(self, admin_id: str, vps_id: int, container_name: str, vps_number: int):
         super().__init__(timeout=60)  # 60 seconds to confirm
@@ -4199,7 +4247,7 @@ async def execute_command(ctx, container_name: str, *, command: str):
 @is_admin()
 async def stop_all_vps(ctx):
     embed = create_warning_embed("Stopping All VPS", "⚠️ **WARNING:** This will stop ALL running VPS on all nodes.\n\nThis action cannot be undone. Continue?")
-    class ConfirmView(discord.ui.LayoutView):
+    class ConfirmView(AppLayoutView):
         def __init__(self):
             super().__init__(timeout=60)
 
@@ -5444,7 +5492,7 @@ async def node_cmd(ctx, sub: str, *args):
 
         embed = create_warning_embed("⚠️ Delete Node", warning_msg)
 
-        class ConfirmDelete(discord.ui.LayoutView):
+        class ConfirmDelete(AppLayoutView):
             def __init__(self, node_id, node_name, force, vps_count):
                 super().__init__(timeout=60)
                 self.node_id = node_id
@@ -5597,7 +5645,7 @@ async def node_cmd(ctx, sub: str, *args):
             f"• Require updating the remote node agent\n\n"
             f"Are you sure you want to continue?")
 
-        class ConfirmRegenKey(discord.ui.LayoutView):
+        class ConfirmRegenKey(AppLayoutView):
             def __init__(self, node_id, node):
                 super().__init__(timeout=60)
                 self.node_id = node_id
@@ -5692,7 +5740,7 @@ async def node_cmd(ctx, sub: str, *args):
             False)
         await send_ui(ctx, embed=embed)
 
-class HelpView(discord.ui.LayoutView):
+class HelpView(AppLayoutView):
     def __init__(self, ctx):
         super().__init__(timeout=300)
         self.ctx = ctx

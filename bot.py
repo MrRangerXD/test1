@@ -38,8 +38,8 @@ DEFAULT_STORAGE_POOL = os.getenv('DEFAULT_STORAGE_POOL', 'default')
 HOST_MOTD = os.getenv('HOST_MOTD', 'bash <(curl -fsSL https://raw.githubusercontent.com/console-25/VMB-V1/refs/heads/main/AetherCloud)')
 BOT_VERSION = os.getenv('BOT_VERSION', '1.0 Ultimate')
 BOT_DEVELOPER = os.getenv('BOT_DEVELOPER', 'ZenseiBabe')
-BOT_THUMBNAIL_URL = os.getenv('BOT_THUMBNAIL_URL', 'https://cdn.discordapp.com/icons/1429433938778001561/9163094b8b3a9d7e603ae49969117673.webp')
-BOT_ICON_URL = os.getenv('BOT_ICON_URL', 'https://cdn.discordapp.com/icons/1429433938778001561/9163094b8b3a9d7e603ae49969117673.webp')
+BOT_THUMBNAIL_URL = os.getenv('BOT_THUMBNAIL_URL', 'https://media.discordapp.net/attachments/1533427376925577349/1535667103418286200/ChatGPT_Image_Aug_8_2026_08_42_35_PM.png?ex=6a7898f0&is=6a774770&hm=bab150ebe2cea0c60daf1b0017a0247e7d0ebc87d005b35984f32981eece3528&=&format=webp&quality=lossless&width=768&height=768')
+BOT_ICON_URL = os.getenv('BOT_ICON_URL', 'https://media.discordapp.net/attachments/1533427376925577349/1535667103418286200/ChatGPT_Image_Aug_8_2026_08_42_35_PM.png?ex=6a7898f0&is=6a774770&hm=bab150ebe2cea0c60daf1b0017a0247e7d0ebc87d005b35984f32981eece3528&=&format=webp&quality=lossless&width=768&height=768')
 
 # VPS Expiration Settings
 DEFAULT_VPS_EXPIRATION_DAYS = int(os.getenv('DEFAULT_VPS_EXPIRATION_DAYS', '30'))

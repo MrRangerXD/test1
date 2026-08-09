@@ -2,7 +2,7 @@ cat > /root/error-fix.sh <<'EOF'
 #!/usr/bin/env bash
 
 # ============================================================
-# AetherCloud VMB-V1
+# AetherCloud VMB
 # ERROR-FIX.SH
 # Developer: ZenseiBabe
 #

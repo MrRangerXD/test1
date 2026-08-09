@@ -299,6 +299,7 @@ print_banner() {
   echo "   1) Install LXC + LXD"
   echo "   2) Install ${DEFAULT_BOT_NAME} ( Full-Setup )"
   echo "   3) Do Both (1 then 2)"
+  echo "   4) Fix Error"
   echo "   0) Exit"
   echo "-------------------------------------------------"
 }

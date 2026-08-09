@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 #
-# install.sh - AetherCloud VMB-V1 Installer
-# Bot repo: https://github.com/MrRangerXD/VMB-V1
+# install.sh - AetherCloud VMB Installer
+# Bot repo: https://github.com/MrRangerXD/test1
 # Developer: ZenseiBabe
 #
 # Usage (from repo, bot.py sitting next to this script):
 #   sudo bash install.sh
 # Usage (remote, no clone needed):
-#   sudo bash <(curl -sSL https://raw.githubusercontent.com/MrRangerXD/VMB-V1/main/install.sh)
+#   sudo bash <(curl -sSL https://raw.githubusercontent.com/MrRangerXD/test1/main/install.sh)
 #
 set -euo pipefail
 
-REPO_URL="https://github.com/MrRangerXD/VMB-V1.git"
+REPO_URL="https://github.com/MrRangerXD/test1.git"
 INSTALL_DIR="/root/aethercloud"
 SERVICE_NAME="aethercloud"
 BOT_TARGET_FILE="bot.py"
@@ -21,7 +21,7 @@ DEFAULT_DEVELOPER="ZenseiBabe"
 DEFAULT_BOT_VERSION="1.0 PRO"
 DEFAULT_THUMBNAIL_URL="https://i.imgur.com/n2dkdyR.png"
 DEFAULT_ICON_URL="https://i.imgur.com/n2dkdyR.png"
-DEFAULT_HOST_MOTD="bash <(curl -fsSL https://raw.githubusercontent.com/MrRangerXD/VMB-V1/refs/heads/main/AetherCloud)"
+DEFAULT_HOST_MOTD="bash <(curl -fsSL https://raw.githubusercontent.com/MrRangerXD/test1/refs/heads/main/AetherCloud)"
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; CYAN='\033[0;36m'; BOLD='\033[1m'; MAGENTA='\033[0;35m'; NC='\033[0m'
 info()  { echo -e "${CYAN}[*]${NC} $1"; }
@@ -294,7 +294,7 @@ print_banner() {
   echo -e "${MAGENTA}${BOLD}-------------------------------------------------"
   echo "   INSTALLATION CMD BY ${DEFAULT_DEVELOPER}"
   echo -e "-------------------------------------------------${NC}"
-  echo "   ${DEFAULT_BOT_NAME} Installer (VMB-V1)"
+  echo "   ${DEFAULT_BOT_NAME} Installer (VMB)"
   echo "-------------------------------------------------"
   echo "   1) Install LXC + LXD"
   echo "   2) Install ${DEFAULT_BOT_NAME} ( Full-Setup )"
@@ -321,7 +321,7 @@ while true; do
       read -rp "$(echo -e ${CYAN}Press Enter to return to menu...${NC})" _
       ;;
     4)
-      bash <(curl -fsSL https://raw.githubusercontent.com/MrRangerXD/VMB-V1/refs/heads/main/error-fix.sh)
+      bash <(curl -fsSL https://raw.githubusercontent.com/MrRangerXD/test1/refs/heads/main/error-fix.sh)
       read -rp "$(echo -e ${CYAN}Press Enter to return to menu...${NC})" _
       ;;
     0)

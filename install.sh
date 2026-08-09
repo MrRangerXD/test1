@@ -19,8 +19,8 @@ ENV_FILE="${INSTALL_DIR}/.env"
 DEFAULT_BOT_NAME="AetherCloud"
 DEFAULT_DEVELOPER="ZenseiBabe"
 DEFAULT_BOT_VERSION="1.0 PRO"
-DEFAULT_THUMBNAIL_URL="https://media.discordapp.net/attachments/1533427376925577349/1535667103418286200/ChatGPT_Image_Aug_8_2026_08_42_35_PM.png?ex=6a7898f0&is=6a774770&hm=bab150ebe2cea0c60daf1b0017a0247e7d0ebc87d005b35984f32981eece3528&=&format=webp&quality=lossless&width=768&height=768"
-DEFAULT_ICON_URL="https://media.discordapp.net/attachments/1533427376925577349/1535667103418286200/ChatGPT_Image_Aug_8_2026_08_42_35_PM.png?ex=6a7898f0&is=6a774770&hm=bab150ebe2cea0c60daf1b0017a0247e7d0ebc87d005b35984f32981eece3528&=&format=webp&quality=lossless&width=768&height=768"
+DEFAULT_THUMBNAIL_URL="https://i.imgur.com/n2dkdyR.png"
+DEFAULT_ICON_URL="https://i.imgur.com/n2dkdyR.png"
 DEFAULT_HOST_MOTD="bash <(curl -fsSL https://raw.githubusercontent.com/MrRangerXD/VMB-V1/refs/heads/main/AetherCloud)"
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; CYAN='\033[0;36m'; BOLD='\033[1m'; MAGENTA='\033[0;35m'; NC='\033[0m'
@@ -318,6 +318,10 @@ while true; do
     3)
       step_install_lxc
       step_install_bot
+      read -rp "$(echo -e ${CYAN}Press Enter to return to menu...${NC})" _
+      ;;
+    4)
+      bash <(curl -fsSL https://raw.githubusercontent.com/MrRangerXD/VMB-V1/refs/heads/main/error-fix.sh)
       read -rp "$(echo -e ${CYAN}Press Enter to return to menu...${NC})" _
       ;;
     0)
